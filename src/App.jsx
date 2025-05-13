@@ -12,7 +12,8 @@ function App() {
     "女性服おすすめ",
     "名古屋グルメ",
   ]);
-  let [good, g_change] = useState(0);
+  let [good, g_change] = useState(Array(title.length).fill(0));
+  let [modal, setModal] = useState(false);
 
   return (
     <div className="App">
@@ -37,7 +38,7 @@ function App() {
       >
         abc
       </button>
-      <div className="list">
+      {/* <div className="list">
         <h4>
           {title[0]}
           <span
@@ -56,19 +57,55 @@ function App() {
         <p>5月11日発行</p>
       </div>
       <div className="list">
-        <h4>{title[2]}</h4>
+        <h4 onClick={() => setModal(!modal)}>{title[2]}</h4>
         <p>5月11日発行</p>
       </div>
-      <Modal></Modal>
+      {modal === true ? <Modal /> : null} */}
+      {title.map(function (title, i) {
+        return (
+          <div className="list" key={i}>
+            <h4 onClick={() => setModal(!modal)}>
+              {title}
+
+              <span
+                onClick={() => {
+                  let copy = [...good];
+                  copy[i] += 1;
+                  g_change(copy);
+                }}
+              >
+                👍
+              </span>
+              {good[i]}
+            </h4>
+            <p>5月11日発行</p>
+          </div>
+        );
+      })}
+      {modal === true ? (
+        <Modal color={"skyblue"} title={title} c_title2="女性服おすすめ" />
+      ) : null}
     </div>
   );
 }
-function Modal() {
+
+function Modal(props) {
+  let [title, c_title] = useState([props.title[0], props.title[1], props[2]]);
+
   return (
-    <div className="modal">
-      <h4>題目</h4>
+    <div className="modal" style={{ background: props.color }}>
+      <h4>{title[0]}</h4>
       <p>日数</p>
       <p>内容</p>
+      <button
+        onClick={() => {
+          let copy = [...title];
+          copy = [props.c_title2];
+          c_title(copy);
+        }}
+      >
+        修正
+      </button>
     </div>
   );
 }

@@ -14,7 +14,8 @@ function App() {
   ]);
   let [good, g_change] = useState(Array(title.length).fill(0));
   let [modal, setModal] = useState(false);
-
+  let [selectedIndex, setSelectedIndex] = useState(null);
+  let [i_value, c_value] = useState("");
   return (
     <div className="App">
       <div className="black-nav">
@@ -61,16 +62,21 @@ function App() {
         <p>5月11日発行</p>
       </div>
       {modal === true ? <Modal /> : null} */}
-      {title.map(function (title, i) {
+      {title.map(function (item, i) {
         return (
           <div className="list" key={i}>
-            <h4 onClick={() => setModal(!modal)}>
-              {title}
-
+            <h4
+              onClick={() => {
+                setModal(!modal);
+                setSelectedIndex(i);
+              }}
+            >
+              {item}
               <span
-                onClick={() => {
+                onClick={(e) => {
                   let copy = [...good];
                   copy[i] += 1;
+                  e.stopPropagation();
                   g_change(copy);
                 }}
               >
@@ -78,34 +84,48 @@ function App() {
               </span>
               {good[i]}
             </h4>
-            <p>5月11日発行</p>
+            <p>
+              5月11日発行{" "}
+              <span>
+                <button
+                  className="d_Btn"
+                  onClick={() => {
+                    let copy = title.filter((_, idx) => idx !== i);
+                    c_title(copy);
+                  }}
+                >
+                  削除
+                </button>
+              </span>
+            </p>
           </div>
         );
       })}
+      <input className="new_title" />{" "}
+      <button
+        onClick={() => {
+          let new_title = document.getElementsByClassName("new_title")[0].value;
+          let copy = [...title];
+          copy.unshift(new_title);
+          c_title(copy);
+        }}
+      >
+        入力
+      </button>
       {modal === true ? (
-        <Modal color={"skyblue"} title={title} c_title2="女性服おすすめ" />
+        <Modal color={"skyblue"} title={title[selectedIndex]} />
       ) : null}
     </div>
   );
 }
 
 function Modal(props) {
-  let [title, c_title] = useState([props.title[0], props.title[1], props[2]]);
-
   return (
     <div className="modal" style={{ background: props.color }}>
-      <h4>{title[0]}</h4>
+      <h4>{props.title}</h4>
       <p>日数</p>
       <p>内容</p>
-      <button
-        onClick={() => {
-          let copy = [...title];
-          copy = [props.c_title2];
-          c_title(copy);
-        }}
-      >
-        修正
-      </button>
+      <button>修正</button>
     </div>
   );
 }

@@ -1,25 +1,35 @@
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
 }
-div {
-  box-sizing: border-box;
+.main_color {
+  background: #3eb489;
+  --accent-color: #ffffff;
+  --text-color: #333;
 }
-.black-nav {
-  display: flex;
-  background: black;
+.main-bg-wrapper img {
+  height: 700px;
+}
+.food-card {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   width: 100%;
+  height: 200px;
   color: white;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: start;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
 }
-
-.list {
-  padding-left: 20px;
-  text-align: left;
-  border-bottom: 1px solid grey;
+.food_img1 {
+  background-image: url("./img/food1.png");
 }
-.modal {
-  margin-top: 20px;
-  padding: 20px;
-  background: #eee;
-  text-align: left;
+.food_img2 {
+  background-image: url("./img/food2.png");
+}
+.food_img3 {
+  background-image: url("./img/food3.png");
 }

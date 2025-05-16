@@ -1,133 +1,107 @@
-/* eslint-disable*/
-
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
+import { Button, Navbar, Container, Nav, Row, Col } from "react-bootstrap";
+import image from "./img/bg-1.png";
+import food1 from "./img/food1.png";
 import "./App.css";
+import foods from "./data.js";
+import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Detail from "./routes/Detail.jsx";
 
 function App() {
-  let post = "名古屋うどんグルメ";
-  let [title, c_title] = useState([
-    "男性服おすすめ",
-    "女性服おすすめ",
-    "名古屋グルメ",
-  ]);
-  let [good, g_change] = useState(Array(title.length).fill(0));
-  let [modal, setModal] = useState(false);
-  let [selectedIndex, setSelectedIndex] = useState(null);
-  let [i_value, c_value] = useState("");
+  let [foodsList] = useState(foods);
+  let navigate = useNavigate();
   return (
     <div className="App">
-      <div className="black-nav">
-        <h4 style={{ color: "red", fontSize: "16px" }}>ReactBlog</h4>
-      </div>
-      <button
-        onClick={() => {
-          let copy = [...title];
-          copy[0] = "女性服おすすめ";
-          c_title(copy);
-        }}
-      >
-        change
-      </button>
-      <button
-        onClick={() => {
-          let copy = [...title];
-          copy.sort();
-          c_title(copy);
-        }}
-      >
-        abc
-      </button>
-      {/* <div className="list">
-        <h4>
-          {title[0]}
-          <span
+      <Navbar data-bs-theme="dark" className="main_color">
+        <Container>
+          <Navbar.Brand
             onClick={() => {
-              g_change(good + 1);
+              navigate("/");
             }}
           >
-            👍
-          </span>
-          {good}
-        </h4>
-        <p>5月11日発行</p>
-      </div>
-      <div className="list">
-        <h4>{title[1]}</h4>
-        <p>5月11日発行</p>
-      </div>
-      <div className="list">
-        <h4 onClick={() => setModal(!modal)}>{title[2]}</h4>
-        <p>5月11日発行</p>
-      </div>
-      {modal === true ? <Modal /> : null} */}
-      {title.map(function (item, i) {
-        return (
-          <div className="list" key={i}>
-            <h4
+            sannpogate
+          </Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link href="">マップ</Nav.Link>
+            <Nav.Link href="#features">グルメ</Nav.Link>
+            <Nav.Link href="#pricing">散歩コース</Nav.Link>
+            <Nav.Link
               onClick={() => {
-                setModal(!modal);
-                setSelectedIndex(i);
+                navigate("/detail");
               }}
             >
-              {item}
-              <span
-                onClick={(e) => {
-                  let copy = [...good];
-                  copy[i] += 1;
-                  e.stopPropagation();
-                  g_change(copy);
-                }}
-              >
-                👍
-              </span>
-              {good[i]}
-            </h4>
-            <p>
-              5月11日発行{" "}
-              <span>
-                <button
-                  className="d_Btn"
-                  onClick={() => {
-                    let copy = title.filter((_, idx) => idx !== i);
-                    c_title(copy);
-                  }}
-                >
-                  削除
-                </button>
-              </span>
-            </p>
-          </div>
-        );
-      })}
-      <input className="new_title" />{" "}
-      <button
-        onClick={() => {
-          let new_title = document.getElementsByClassName("new_title")[0].value;
-          let copy = [...title];
-          copy.unshift(new_title);
-          c_title(copy);
-        }}
-      >
-        入力
-      </button>
-      {modal === true ? (
-        <Modal color={"skyblue"} title={title[selectedIndex]} />
-      ) : null}
+              情報
+            </Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <div className="main-bg-wrapper">
+                <img src={image} style={{ width: "100%" }} />
+              </div>
+              <Container>
+                <Row>
+                  {foodsList.map((item) => (
+                    <Modal
+                      key={item.id}
+                      title={item.title}
+                      img={item.img}
+                      content={item.content}
+                    />
+                  ))}
+                </Row>
+              </Container>
+            </>
+          }
+        />
+        <Route path="/detail/:id" element={<Detail foods={foods}></Detail>} />
+        <Route path="/about" element={<About></About>}>
+          <Route path="member" element={<div>member</div>} />
+          <Route path="location" element={<div>位置情報</div>} />
+        </Route>
+        <Route path="/event" element={<Event></Event>}>
+          <Route path="one" element={<p>初注文時40%クーポンサービス</p>} />
+          <Route path="two" element={<p>お誕生日クーポン貰う</p>} />
+        </Route>
+        <Route path="*" element={<div>ページが見つかりません</div>} />
+      </Routes>
     </div>
   );
 }
-
 function Modal(props) {
   return (
-    <div className="modal" style={{ background: props.color }}>
+    <Col
+      className="food-card"
+      style={{ backgroundImage: `url(${props.img})` }}
+      sm
+    >
       <h4>{props.title}</h4>
-      <p>日数</p>
-      <p>内容</p>
-      <button>修正</button>
-    </div>
+      <p>{props.content}</p>
+    </Col>
   );
 }
 
+function About() {
+  return (
+    <div>
+      <h4>会社情報ページ</h4>
+      <Outlet></Outlet>
+    </div>
+  );
+}
+function Event() {
+  return (
+    <div>
+      <h2>今日のイベント</h2>
+      <Outlet></Outlet>
+    </div>
+  );
+}
 export default App;

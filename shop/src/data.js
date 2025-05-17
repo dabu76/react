@@ -3,7 +3,7 @@ const foods = [
     id: 0,
     title: "橦木町 しみず",
     content: "日本料理",
-    img: "/img/food1.png", // ✅ 슬래시(/)로 시작해야 함
+    img: "/img/food1.png",
     score: 4.54,
   },
   {
@@ -18,6 +18,7 @@ const foods = [
     title: "レミニセンス",
     content: "フレンチ",
     img: "/img/food3.png",
+    price: "1500円~3000円",
     score: 4.44,
   },
 ];

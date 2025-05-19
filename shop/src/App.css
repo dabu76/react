@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
 }
+
 .main_color {
   background: #3eb489;
   --accent-color: #ffffff;
@@ -32,4 +33,11 @@
 }
 .food_img3 {
   background-image: url("./img/food3.png");
+}
+.start {
+  opacity: 0;
+}
+.end {
+  opacity: 1;
+  transition: opacity 0.5s;
 }

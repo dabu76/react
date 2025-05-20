@@ -60,7 +60,9 @@ function Detail(props) {
           <p>{result.content}</p>
           <p>{result.price}</p>
           <p>2.5km</p>
-          <button className="btn btn-danger">要約</button>
+          <button onClick={() => {}} className="btn btn-danger">
+            要約
+          </button>
         </div>
       </div>
       <Nav variant="tabs" defaultActiveKey="link0">

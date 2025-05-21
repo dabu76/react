@@ -13,6 +13,12 @@ import Cart from "./routes/cart.jsx";
 export const Context1 = createContext();
 
 function App() {
+  useEffect(() => {
+    const existing = localStorage.getItem("watched");
+    if (!existing) {
+      localStorage.setItem("watched", JSON.stringify([]));
+    }
+  }, []);
   const [foodsList, setFoodsList] = useState(foods);
   const navigate = useNavigate();
   const [count, setCount] = useState(0);

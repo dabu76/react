@@ -3,8 +3,22 @@ import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Navbar, Container, Nav, Row, Col } from "react-bootstrap";
 import { Context1 } from "./../App.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { reservation } from "../store.js";
 
 function Detail(props) {
+  let { id } = useParams();
+  const result = props.foods.find((foods) => foods.id === parseInt(id));
+  const dispatch = useDispatch();
+  let cart = useSelector((state) => state.product);
+  useEffect(() => {
+    let data = localStorage.getItem("watched");
+    let getData = JSON.parse(data);
+    if (!getData.includes(result.id)) {
+      getData.push(result.id);
+      localStorage.setItem("watched", JSON.stringify(getData));
+    }
+  }, []);
   let { stock } = useContext(Context1);
 
   let [count, setCount] = useState(0);
@@ -35,8 +49,6 @@ function Detail(props) {
     };
   }, [num]);
 
-  let { id } = useParams();
-  const result = props.foods.find((foods) => foods.id === parseInt(id));
   return (
     <div className={"container start " + fade}>
       {alert == true ? (
@@ -60,7 +72,12 @@ function Detail(props) {
           <p>{result.content}</p>
           <p>{result.price}</p>
           <p>2.5km</p>
-          <button onClick={() => {}} className="btn btn-danger">
+          <button
+            onClick={() => {
+              dispatch(reservation(result));
+            }}
+            className="btn btn-danger"
+          >
             要約
           </button>
         </div>

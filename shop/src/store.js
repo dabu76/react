@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+
 import user from "./store2/userSlice";
 
 let stock = createSlice({
@@ -17,9 +18,12 @@ let product = createSlice({
       const index = state.findIndex((item) => item.id === id);
       state[index].count++;
     },
+    reservation(state, action) {
+      state.push(action.payload);
+    },
   },
 });
-export let { changeCount } = product.actions;
+export let { changeCount, reservation } = product.actions;
 export default configureStore({
   reducer: {
     user: user.reducer,

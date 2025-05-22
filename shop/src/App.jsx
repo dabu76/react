@@ -1,15 +1,16 @@
 // App.jsx
-import { createContext, useEffect, useState } from "react";
+import { Suspense, lazy, createContext, useEffect, useState } from "react";
 import { Button, Navbar, Container, Nav, Row, Col } from "react-bootstrap";
 import image from "./img/bg-1.png";
 import "./App.css";
 import foods from "./data.js";
 import { Routes, Route, useNavigate, Outlet } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Detail from "./routes/Detail.jsx";
 import axios from "axios";
-import Cart from "./routes/cart.jsx";
+import { useQuery } from "@tanstack/react-query";
 
+const Detail = lazy(() => import("./routes/Detail.jsx"));
+const Cart = lazy(() => import("./routes/cart.jsx"));
 export const Context1 = createContext();
 
 function App() {
@@ -24,6 +25,13 @@ function App() {
   const [count, setCount] = useState(0);
   const [wait, setWait] = useState("");
   const [stock] = useState([10, 11, 12]);
+  let result = useQuery({
+    queryKey: ["name"],
+    queryFn: () =>
+      axios
+        .get("https://codingapple1.github.io/userdata.json")
+        .then((res) => res.data),
+  });
 
   return (
     <div className="App">
@@ -35,6 +43,10 @@ function App() {
             <Nav.Link href="#features">グルメ</Nav.Link>
             <Nav.Link href="#pricing">散歩コース</Nav.Link>
             <Nav.Link onClick={() => navigate("/detail/1")}>情報</Nav.Link>
+          </Nav>
+          <Nav className="ms-auto">
+            {result.isLoading ? "ローディング中" : result.data.name}
+            {result.error ? "エラー発生" : null}
           </Nav>
         </Container>
       </Navbar>
@@ -101,7 +113,9 @@ function App() {
           path="/detail/:id"
           element={
             <Context1.Provider value={{ stock }}>
-              <Detail foods={foodsList} />
+              <Suspense fallback={<div>ローディング中</div>}>
+                <Detail foods={foodsList} />
+              </Suspense>
             </Context1.Provider>
           }
         />

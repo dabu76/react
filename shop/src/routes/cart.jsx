@@ -3,23 +3,20 @@ import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { changeName, increase } from "./../store2/userSlice.js";
 import { changeCount } from "./../store";
+import { memo, useMemo, useState } from "react";
+
 function Cart() {
   let a = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
+  let [count, setCount] = useState(0);
   return (
     <>
       <h6>
         {a.user.name}の買い物リスト（年齢: {a.user.age}）
       </h6>
-      <button
-        onClick={() => {
-          dispatch(increase(10));
-        }}
-      >
-        ボタン
-      </button>
+
       <Table>
         <thead>
           <tr>

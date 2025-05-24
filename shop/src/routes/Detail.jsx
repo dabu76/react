@@ -5,7 +5,9 @@ import { Button, Navbar, Container, Nav, Row, Col } from "react-bootstrap";
 import { Context1 } from "./../App.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { reservation } from "../store.js";
-
+import { useLike } from "../hooks/like.js";
+import { useUser } from "../hooks/user.js";
+import axios from "axios";
 function Detail(props) {
   let { id } = useParams();
   const result = props.foods.find((foods) => foods.id === parseInt(id));
@@ -27,7 +29,6 @@ function Detail(props) {
   let [error, setError] = useState("");
   let [modal, setModal] = useState(0);
   let [fade, setFade] = useState("");
-
   const isNumber = /^-?\d+$/.test(num);
   const handleChange = (e) => {
     setNum(e.target.value);
@@ -48,9 +49,15 @@ function Detail(props) {
       clearTimeout(timer);
     };
   }, [num]);
+  let [like, addLike] = useLike();
+  const { data, isLoading } = useUser();
+
+  if (isLoading) return <p>ローディング中</p>;
+  if (error) return <p>エラー</p>;
 
   return (
     <div className={"container start " + fade}>
+      {data.name}
       {alert == true ? (
         <div className="alert alert-warning">2秒以内購入したら割引</div>
       ) : null}
@@ -66,8 +73,14 @@ function Detail(props) {
           <img src={result.img} width="100%" />
         </div>
         <div className="col-md-6">
-          <p>{error}</p>
-          <input onChange={handleChange} type="text"></input>
+          {like}{" "}
+          <span
+            onClick={() => {
+              addLike();
+            }}
+          >
+            ♥
+          </span>
           <h4 className="p">{result.title}</h4>
           <p>{result.content}</p>
           <p>{result.price}</p>
